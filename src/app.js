@@ -8,19 +8,19 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser'); 
+const bodyParser = require('body-parser');
 
 const consume = require("./consumer");
 const produce = require('./producer');
 
 //SERVICES--------------------------------------
-const {PostService} = require('./services/PostService');
-const {PostSuscriptoService} = require('./services/PostSuscriptoService');
-const {UserService} = require('./services/UserService');
+const { PostService } = require('./services/PostService');
+const { PostSuscriptoService } = require('./services/PostSuscriptoService');
+const { UserService } = require('./services/UserService');
 
 //---------------------------------------------------
 //REGISTRO
-var user = require('./routes/user'); 
+var user = require('./routes/user');
 
 const app = express();
 const server = http.createServer(app);
@@ -29,7 +29,7 @@ const io = new Server(server);
 require('./lib/passport');
 
 //MIDDLEWARES------------------------------------------
-app.use(express.urlencoded({extended:false}))//para q cuando envien un POST desde un form lo entienda
+app.use(express.urlencoded({ extended: false }))//para q cuando envien un POST desde un form lo entienda
 app.use(express.json());//para q entienda objetos json
 app.use(morgan('dev'));
 app.use(cors());//para q permita q cualquier servidor pida cosas y haga operaciones
@@ -38,13 +38,13 @@ app.use(express.static(path.join(__dirname, './views/static')));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
- 
+
 app.use(session({
     secret: 'DistribuidosTp2',
-    resave : true,
+    resave: true,
     saveUninitialized: true,
 }));
-app.use(flash()); 
+app.use(flash());
 //passport
 app.use(passport.initialize());
 app.use(passport.session());
@@ -57,7 +57,7 @@ app.set('view engine', 'hbs'); //CAMBIO PUG POR HBS
 app.set('views', './src/views');
 
 //VARIABLES GLOBALES-----------------------------------
-app.use((req, res, next) =>{
+app.use((req, res, next) => {
     app.locals.success = req.flash('success');
     app.locals.message = req.flash('message');
     app.locals.user = req.user;
@@ -78,19 +78,19 @@ app.get('/', (req, res) => {
 
 app.post('/users/123/follow', (req, res) => {
     produce
-    .follow('juan_notificaciones', 'Marta')
-    .catch((err) => {
-        console.error("Error en producer: ", err);
-    });
+        .follow('juan_notificaciones', 'Marta')
+        .catch((err) => {
+            console.error("Error en producer: ", err);
+        });
     res.end();
 });
 
 app.post('/posts/123/like', (req, res) => {
     produce
-    .like('juan_notificaciones', '123', 'Marta')
-    .catch((err) => {
-        console.error("Error en producer: ", err);
-    });
+        .like('juan_notificaciones', '123', 'Marta')
+        .catch((err) => {
+            console.error("Error en producer: ", err);
+        });
     res.end();
 });
 
@@ -104,21 +104,21 @@ app.post('/noticias/traerMensajes', consume.traerMensajes)
 
 //-------------------------------------
 /** AGREGAR UN NUEVO POST Y GUARDARLO */
-app.get('/nuevoPost', (req,res)=>{
+app.get('/nuevoPost', (req, res) => {
     return res.render('nuevoPost');
 });
-app.post('/agregarNuevoPost', async (req,res)=>{
+app.post('/agregarNuevoPost', async (req, res) => {
     const nuevoPost = {
-        "topic" : "nuevoTopic", 
+        "topic": "nuevoTopic",
         "msg": {
-            "titulo" : req.body.titulo,
-            "imagen" : req.body.imagen,
-            "texto" : req.body.texto,
-            "idUser" : 1 //este atributo va a ser estatico hasta que se implemente la autenticacion de user (login/register) para identificar al user que lo crea
+            "titulo": req.body.titulo,
+            "imagen": req.body.imagen,
+            "texto": req.body.texto,
+            "idUser": 1 //este atributo va a ser estatico hasta que se implemente la autenticacion de user (login/register) para identificar al user que lo crea
         }
     }
 
-    console.log("Nuevo post --> "+ nuevoPost);
+    console.log("Nuevo post --> " + nuevoPost);
     await PostService.add(nuevoPost.msg); //guardo los datos post en la BD para la persistencia
     await produce.guardarPost(nuevoPost); //creo el post con kafka 
 
@@ -126,20 +126,23 @@ app.post('/agregarNuevoPost', async (req,res)=>{
 });
 
 /** Buscar usuarios para seguir */
-app.get('/buscarUsuarios', (req,res)=>{
+app.get('/buscarUsuarios', (req, res) => {
     return res.render('listarUsuarios');
 });
-app.post('/buscarUsuarios', async(req,res)=>{
+app.post('/buscarUsuarios', async (req, res) => {
     const usuariosBuscados = await UserService.findUsersByUsername(req.body.username); //realizo la query
     const usuarios = usuariosBuscados.userFilters;
     console.log(usuarios);
 
-    return res.render('listarUsuarios', {usuarios: usuarios});
+    return res.render('listarUsuarios', { usuarios: usuarios });
 });
 
-
+/**Seguir usuarios */
+app.post('/follow', async (req, res) => { 
+    console.log("siguiendo");
+});
 io.on('connection', (socket) => {
-    console.log('a user connected'); 
+    console.log('a user connected');
 });
 
 module.exports = server;

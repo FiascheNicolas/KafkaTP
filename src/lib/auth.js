@@ -18,6 +18,6 @@ module.exports = {
         if (!req.isAuthenticated()) { //si el usuario no está autenticado.
             return next();
         }
-        return res.render('inicio', { page_title: 'Inicio' });
+        return res.render('login', { page_title: 'Login' });
     }
 };

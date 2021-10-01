@@ -12,6 +12,7 @@
     {{!-- FONT AWESOME 5 --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
       crossorigin="anonymous">
+      <link rel="stylesheet" href="/css/home.css">
 
     <style>
       .bd-placeholder-img {
@@ -37,16 +38,16 @@
 <body class="d-flex flex-column h-100">
   <header>
         <!-- Navbar -->
-    <nav class="navbar navbar-expand navbar-dark fixed-top bg-dark">
+    <nav class="navbar navbar-expand  fixed-top shadow bg-white">
         <div class="container-fluid">
-            <a class="navbar-brand mr-1" href="/">UNLa</a>
+            <a class="navbar-brand mr-1" href="/">FaceUNLa</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Inicio</a>
+                        <a class="nav-link active" aria-current="page" href="#"><i class="fas fa-home"></i></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/nuevoPost">Post</a>
@@ -60,7 +61,7 @@
                 <li class="nav-item dropdown no-arrow mx-1">
                     <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-bell fa-fw"></i>
-                    <span class="badge badge-danger">9+</span>
+                    <span class="badge badge-danger">1+</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
                     <a class="dropdown-item" href="#">Ver</a>
@@ -79,14 +80,15 @@
                 <li class="nav-item dropdown no-arrow">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-user-circle fa-fw"></i>
+                    {{user.fullname}}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-                    <a class="dropdown-item" href="#">Perfil</a>
+                    <a class="dropdown-item" href="#"><i class="fas fa-user-alt"></i> Ver tu perfil</a>
                     <div class="dropdown-divider"></div>
                     {{!--
                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Cerrar sesión</a>
                     --}}
-                    <a class="dropdown-item" href="/logout">Cerrar sesión</a>
+                    <a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a>
                     </div>
                 </li>
             </ul>
@@ -134,7 +136,7 @@
                 <div class="card-body">
                   <h3>Bienvenido/a {{user.fullname}}</h3>
                   <h4>{{user.username}}</h4>
-                  <a href="/nuevoPost" class="btn btn-primary m-4">Nuevo Post</a>
+                  <a href="/nuevoPost" class="btn btn-primary m-4"><i class="fas fa-plus-circle mr-1"></i>Nuevo Post</a>
                 </div>
               </div>
             </div>
@@ -142,15 +144,6 @@
         </div>
       </div>
     </main>
-
-    <!-- Pie de página -->
-    <footer class="footer mt-auto py-3 bg-light">
-        <div class="container" align="center">
-          <p>TP Kafka, Sist. Distribuidos, UNLa.
-            <br>
-          &copy; 2021 Baez, Bustos, Galván, Rivera.</p>
-        </div>
-    </footer>
 
   {{!-- Scripts --}}
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
