@@ -5,16 +5,30 @@ const consume = async (io, mensajes) =>{
     const consumer = kafka.consumer({ groupId: "node"}); 
 
     await consumer.connect(); //se conecta el consumidor 
-    await consumer.subscribe({topic: "juan_notificaciones", fromBeginning: true}); //para recibir los mensajes de este topic
+    await consumer.subscribe({ topic: "juan_notificaciones", fromBeginning: true }); //para recibir los mensajes de este topic
+    await consumer.subscribe({ topic: "nuevoTopic", fromBeginning: true }); //para recibir los mensajes de este topic
+    await consumer.subscribe({ topic: "Topic1", fromBeginning: true }); //para recibir los mensajes de este topic
+    console.log('consumer.subscribe*********************************************************************************************************');
+    //await consumer.run({ /** empiza a recibir los mensajes */
+    //    autoCommit: true,
+    //    eachMessage: ({message})=>{
+    //        io.emit('notificacion', `${message.value}`);
+    //    }
+    //});
     await consumer.run({ /** empiza a recibir los mensajes */
-        autoCommit: true,
-        eachMessage: ({message})=>{
-            io.emit('notificacion', `${message.value}`);
-        }
+        eachMessage: async ({ topic, partition, message }) => {
+            console.log("CONSUMER RUNNNNNNNNNNNNNNNNNNNNN");
+            console.log({
+                partition,
+                offset: message.offset,
+                value: message.value.toString(),
+            })
+        },
     });
 }
 
 const traerMensajes = async (req, res) => {
+
     console.log("llegue a traer mensajes :)")
     try {
         const timestamp = Date.now();
