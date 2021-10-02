@@ -108,13 +108,14 @@ app.get('/nuevoPost', (req, res) => {
     return res.render('nuevoPost');
 });
 app.post('/agregarNuevoPost', async (req, res) => {
+
     const nuevoPost = {
-        "topic": "nuevoTopic",
+        "topic": "Topic" + req.session.passport.user,
         "msg": {
             "titulo": req.body.titulo,
             "imagen": req.body.imagen,
             "texto": req.body.texto,
-            "idUser": 1 //este atributo va a ser estatico hasta que se implemente la autenticacion de user (login/register) para identificar al user que lo crea
+            "idUser": req.session.passport.user //este atributo va a ser estatico hasta que se implemente la autenticacion de user (login/register) para identificar al user que lo crea
         }
     }
 
@@ -138,7 +139,11 @@ app.post('/buscarUsuarios', async (req, res) => {
 });
 
 /**Seguir usuarios */
-app.post('/follow', async (req, res) => { 
+app.post('/follow', async (req, res) => {
+    
+    //consume.subscribir().catch((err) => {
+    //    console.error("Error en consumer: ", err)
+    //});
     console.log("siguiendo");
 });
 io.on('connection', (socket) => {
