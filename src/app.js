@@ -147,7 +147,7 @@ app.post('/buscarUsuarios', async (req, res) => {
 /**Seguir usuarios */
 app.post('/follow', async (req, res) => {
     const seguidor = req.session.passport.user;
-    const seguido = req.body.usuarios.id
+    const seguido = req.body.seguido;
 
     const dato =
     {
@@ -158,13 +158,14 @@ app.post('/follow', async (req, res) => {
     console.log(dato);
     
     await SeguidoService.add(dato); //guardo los datos de que siguen en la BD para la persistencia
-    
+    //await produce.guardarPost(nuevoPost); //creo el post con kafka 
     //consume.subscribir().catch((err) => {
     //    console.error("Error en consumer: ", err)
     //});
     console.log("***");
     console.log("User " + seguidor + " siguiendo a " + seguido);
     console.log("***");
+    res.redirect('/buscarUsuarios');
 });
 
 io.on('connection', (socket) => {

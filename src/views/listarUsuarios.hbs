@@ -127,14 +127,16 @@
         <tbody align="center">
           {{#each usuarios}}
           <tr>
-            <form action="/follow" method="POST">
-              <td>{{id}}</td>
-              <td>{{username}}</td>
-              <td>
-                <button type="submit" class="btn btn-success" style="margin-left: 5px;" href="#"><i class="fas fa-user-plus"></i>
+            <td>{{id}}</td>
+            <td>{{username}}</td>
+            <td>
+              <form action="/follow" method="POST">
+                <input id="seguido" name="seguido" value="{{id}}" type="hidden" />
+                <button type="submit" class="btn btn-success" style="margin-left: 5px;"><i
+                    class="fas fa-user-plus"></i>
                   Seguir</button> <!-- aca se llamara al controller para seguir al usuario -->
-              </td>
-            </form>
+              </form>
+            </td>
           </tr>
           {{/each}}
         </tbody>

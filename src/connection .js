@@ -77,6 +77,7 @@ sequelize.sync({ force:false })
 module.exports = {
     UserModel,
     PostModel,
+    SeguidoModel,
     PostSuscriptoModel, 
     sequelize
 }

@@ -7,11 +7,11 @@ class SeguidoService {
     }
 
     static async getAll(){
-        var sguidores = await SeguidoModel.findAll({
+        var seguidores = await SeguidoModel.findAll({
             raw: true,
             nest: true
         });
-        return  {sguidores: sguidores};
+        return  {seguidores: seguidores};
     }
 }
 
