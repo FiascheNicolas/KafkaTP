@@ -1,6 +1,7 @@
 const {Sequelize} = require('sequelize');
 
 const userModel = require('./models/User');
+const seguidoModel = require('./models/Sigue');
 const postModel = require('./models/Post');
 const postSuscriptoModel = require('./models/PostSuscripto');
 
@@ -28,15 +29,17 @@ const sequelize = new Sequelize("bbvz5ubbkmmsymn7s0pm", "u1k3xrdtrvnoxfts", "229
 
 /*** REALIZO LOS MAPEOS DE LAS CLASES */
 const UserModel = userModel(sequelize, Sequelize);
+const SeguidoModel = seguidoModel(sequelize, Sequelize);
 const PostModel = postModel(sequelize, Sequelize);
 const PostSuscriptoModel = postSuscriptoModel(sequelize, Sequelize);
 
 
  /*** relacion one to many de User y Post **/
  UserModel.hasMany(PostModel, {
-        foreignKey: 'idUser' , 
+        foreignKey: 'idUser' ,
         as: 'posts'
-    });
+ });
+    
 PostModel.belongsTo(UserModel, {
     foreignKey: 'idUser',
     as: 'user'
@@ -47,10 +50,22 @@ UserModel.hasMany(PostSuscriptoModel, {
     foreignKey: 'idUser' , 
     as: 'suscripciones'
 });
+
 PostSuscriptoModel.belongsTo(UserModel, {
     foreignKey: 'idUser',
     as: 'user'
 });
+
+ /*** relacion many to many de User **/
+SeguidoModel.belongsTo(UserModel, {
+        foreignKey: 'id_Seguidor' ,
+        as: 'Seguidor'
+ });
+    
+ SeguidoModel.belongsTo(UserModel, {
+        foreignKey: 'Seguido' ,
+        as: 'Sigue_a'
+ });
 
 /** INICIALIZO EL MAPEO **/
 sequelize.sync({ force:false })

@@ -17,6 +17,7 @@ const produce = require('./producer');
 const { PostService } = require('./services/PostService');
 const { PostSuscriptoService } = require('./services/PostSuscriptoService');
 const { UserService } = require('./services/UserService');
+const { SeguidoService } = require('./services/SeguidoService');
 
 //---------------------------------------------------
 //REGISTRO
@@ -130,22 +131,42 @@ app.post('/agregarNuevoPost', async (req, res) => {
 app.get('/buscarUsuarios', (req, res) => {
     return res.render('listarUsuarios');
 });
+
 app.post('/buscarUsuarios', async (req, res) => {
     const usuariosBuscados = await UserService.findUsersByUsername(req.body.username); //realizo la query
     const usuarios = usuariosBuscados.userFilters;
+
+    console.log("*****************************************");
     console.log(usuarios);
+    console.log("*****************************************");
+
 
     return res.render('listarUsuarios', { usuarios: usuarios });
 });
 
 /**Seguir usuarios */
 app.post('/follow', async (req, res) => {
+    const seguidor = req.session.passport.user;
+    const seguido = req.body.usuarios.id
+
+    const dato =
+    {
+        "id_Seguidor": seguidor,
+        "Seguido": seguido
+        }
+    
+    console.log(dato);
+    
+    await SeguidoService.add(dato); //guardo los datos de que siguen en la BD para la persistencia
     
     //consume.subscribir().catch((err) => {
     //    console.error("Error en consumer: ", err)
     //});
-    console.log("siguiendo");
+    console.log("***");
+    console.log("User " + seguidor + " siguiendo a " + seguido);
+    console.log("***");
 });
+
 io.on('connection', (socket) => {
     console.log('a user connected');
 });
