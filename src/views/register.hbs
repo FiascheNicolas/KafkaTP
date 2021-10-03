@@ -3,19 +3,21 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Registrarse</title>
     {{!-- GOOGLE FONTS --}}
     <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
     {{!-- BOOTSTRAP 4 --}}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     {{!-- FONT AWESOME 5 --}}
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <!-- TIPO DE LETRA  -->
     <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans+SC|Open+Sans+Condensed:300&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/css/login.css">
 </head>
+
 <body>
     <header>
         <!-- Navbar -->
@@ -63,45 +65,42 @@
     </div>
     {{/if}}
     <div class="login-wrapper">
-        <form action="/register" method="post" class="form">
-            <h2>Registrarte</h2>
-            <h3>Es rápido y fácil.</h3>
+        <form action="/register" method="post" class="form shadow" style="padding:40px 40px 40px !important;">
+            <div class="d-flex justify-content-between">
+                <h2>Registrarte</h2>
+                <a class="text-dark" href="/login"><i class="fas fa-times"></i></a>
+            </div>
+            <h6>Es rápido y fácil.</h6>
             <!--NAME-->
             <div class="input-group">
-                <input type="text" name="name" id="name" required>
-                <label for="name">Nombre completo</label>
+                <input type="text" name="name" id="name" required placeholder="Nombre completo">
             </div>
             <!--USERNAME-->
             <div class="input-group">
-                <input type="text" name="username" id="username" required>
-                <label for="username">Nombre de usuario </label>
+                <input type="text" name="username" id="username" required placeholder="Nombre de usuario">
             </div>
             <!--CONTRASEÑA-->
             <div class="input-group">
-                <input type="password" name="password" id="password" required>
-                <label for="password">Contraseña</label>
+                <input type="password" name="password" id="password" required placeholder="Contraseña">
             </div>
             <!-- BOTON  -->
-            <div class="btn-group">
-                <div class="col-6">
-                    <a href="/" id="btn_cancelar" class="btn cancelar-btn" style="text-decoration:none">Cancelar</a>
-                </div>
-                <div class="col-6">
-                    <button type="submit" id="btn_register" class="register-btn">Registrarse
-                    </button>
-                </div>
-            </div>
-            <div align="center">
-                <a class="btn btn-link" href="/login">Página de inicio de sesión</a>
+            <div class="btn-group d-flex justify-content-center">
+                <button type="submit" id="btn_register" class="btn btn-lg text-white"
+                    style="background-color:#42b72a;">Registrarte
+                </button>
             </div>
         </form>
     </div>
     {{!-- SCRIPTS --}}
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
 </body>
+
 </html>
