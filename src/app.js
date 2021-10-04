@@ -126,7 +126,17 @@ app.post('/agregarNuevoPost', async (req, res) => {
 
     res.redirect('/home');
 });
+app.get('/getPosts', async (req, res) => {
+    const postsBuscados = await PostService.findPostsByUserId(req.session.passport.user); //realizo la query
+    const posts = postsBuscados.postFilters;
 
+    console.log("*****************************************");
+    console.log(posts);
+    console.log("*****************************************");
+
+
+    return res.render('noticias', { posts: posts });
+});
 /** Buscar usuarios para seguir */
 app.get('/buscarUsuarios', (req, res) => {
     return res.render('listarUsuarios');
@@ -146,6 +156,7 @@ app.post('/buscarUsuarios', async (req, res) => {
 
 /**Seguir usuarios */
 app.post('/follow', async (req, res) => {
+    const user = app.locals.user.users;
     const seguidor = req.session.passport.user;
     const seguido = req.body.seguido;
 
@@ -153,19 +164,20 @@ app.post('/follow', async (req, res) => {
     {
         "id_Seguidor": seguidor,
         "Seguido": seguido
-        }
-    
+    }
+
     console.log(dato);
-    
+
     await SeguidoService.add(dato); //guardo los datos de que siguen en la BD para la persistencia
-    //await produce.guardarPost(nuevoPost); //creo el post con kafka 
-    //consume.subscribir().catch((err) => {
-    //    console.error("Error en consumer: ", err)
-    //});
+    /*produce
+        .follow(followName + '_notificaciones', user.username)
+        .catch((err) => {
+            console.error("Error en producer: ", err);
+        });*/
     console.log("***");
     console.log("User " + seguidor + " siguiendo a " + seguido);
     console.log("***");
-    res.redirect('/buscarUsuarios');
+    res.end();
 });
 
 io.on('connection', (socket) => {
