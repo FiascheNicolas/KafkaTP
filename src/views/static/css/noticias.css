@@ -1,0 +1,8 @@
+.like{
+    font-size: 2em; 
+    color: Dodgerblue;
+}
+
+.like-disabled{
+    pointer-events: none;
+}

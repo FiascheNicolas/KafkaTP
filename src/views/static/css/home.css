@@ -1,0 +1,15 @@
+p{
+    font-size: 1rem !important;
+}
+a{
+    color: #ffffff!important;
+}
+.dropdown-menu{
+    width: 300px;
+}
+
+#cantidadNoti{
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    font-size: 1rem;
+}
