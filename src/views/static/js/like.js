@@ -12,7 +12,7 @@ function like(link, id, cantidadLikes){
         link.classList.add('like-disabled');
         const icon = link.querySelector('i');
         const cantLikes = link.querySelector('b');
-        icon.className = 'fas fa-thumbs-up text-success';
+        icon.className = 'fas fa-heart text-success';
         cantLikes.innerText = parseInt(cantidadLikes) + 1;
         console.log(res);
     })

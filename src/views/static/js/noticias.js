@@ -7,7 +7,10 @@ const api_url = "http://localhost:8080/noticias"
 let listNoticias = [];
 //Genero un json con los topicos que recibo del formulario, en este caso 3
 let listTopicos = [];
-setInterval(apiGet, 2000);
+window.onload = () => {
+    apiGet();
+};
+setInterval(apiGet, 6000);
 
 function apiGet() {
     fetch(api_url + '/traerTopics', {
@@ -16,6 +19,7 @@ function apiGet() {
     })
         .then(res => res.json())
         .then(data => {
+            containerNoticia.innerHTML = ``;
             if (data.length === 0) {
                 const div = document.createElement('div');
                 div.className = "col-12";
@@ -24,7 +28,7 @@ function apiGet() {
             <div class="row">
               <div class="col mx-auto">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    No tiene noticias para ver debido a que no sigue a ningún usuario.
+                    Sin Noticias
                 </div>
               </div>
             </div>
@@ -82,9 +86,9 @@ function traerMensajes(paramTopico) {
                 listNoticias.push(objPOst)
 
                 //En base a la lista de noticias que voy complentando, agrego en el HTML la noticia
-                containerNoticia.innerHTML = ``;
                 //recorro la lista de noticias
                 listNoticias.forEach(posteos => {
+                    containerNoticia.innerHTML = ``;
                     //llamo a la funcion la cual me agrega html para imprimir la noticia
                     renderNoticia(posteos, containerNoticia)
 
@@ -96,13 +100,13 @@ function traerMensajes(paramTopico) {
 
 //Funcion para rellenar el html con la noticia
 function renderNoticia(paramPosteos, paramIdHtml) {
+
     //creo un nuevo div el cual almacenara mi noticia
     const user = paramPosteos.topic.split('_')[0];
-
-    var like = 'class="far fa-thumbs-up" style="cursor: pointer" ';
+    var like = 'class="far fa-heart" style="cursor: pointer" ';
     var disabled = '';
     if (paramPosteos.msg.liked) {
-        like = 'class="fas fa-thumbs-up text-success"';
+        like = 'class="fas fa-heart text-success"';
         disabled = 'like-disabled';
     }
 
@@ -110,23 +114,23 @@ function renderNoticia(paramPosteos, paramIdHtml) {
     div.className = "col-4";
     div.innerHTML = `
         <div class="card shadow-sm">
-            <img class="card-img-top" src="${paramPosteos.msg.imagen}">
             <div class="card-body">
-                <h5 class="card-title" align="center">${paramPosteos.msg.titulo}</h5>
-                <p class="card-text">${paramPosteos.msg.texto}</p>
-                <small class="text-muted">By: ${user}</small>
+                <h5 class="card-title" align="center">${paramPosteos.msg.titulo} - ${user}</h5>
+                <p class="card-text" align="center">${paramPosteos.msg.texto}</p>
                 <div class="justify-content-between align-items-center">
-                    <div align="right">
-                        <a class="like ${disabled}" align="right" onclick="like(this, '${paramPosteos.msg.id}','${paramPosteos.msg.cantidadLikes}')">
+                    <div align="left">
+                        <a style="color:black!important" class="like ${disabled}" align="center" onclick="like(this, '${paramPosteos.msg.id}','${paramPosteos.msg.cantidadLikes}')">
                             <b>${paramPosteos.msg.cantidadLikes}</b>
                             <i ${like}"></i>
                         </a>
                     </div>
                 </div>
+                <img class="card-img-top" src="${paramPosteos.msg.imagen}">
             </div>       
         </div>
         `;
-
+    containerNoticia.innerHTML = ``;
     //incluyo en el nodo div uno nuevo  
     paramIdHtml.appendChild(div);
+
 }

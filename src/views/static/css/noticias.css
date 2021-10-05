@@ -6,3 +6,6 @@
 .like-disabled{
     pointer-events: none;
 }
+a {
+    color: #ffff !important;
+}
