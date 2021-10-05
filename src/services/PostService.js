@@ -16,7 +16,7 @@ class PostService {
 
     static async getPostById(id){
         var post = await PostModel.findOne({
-            where: { /** ME TRAE TODOS LOS USUARIOS QUE CUMPLAN EL PARAMETRO INDICADO*/
+            where: { 
                 id: id
             },
             raw: true,
@@ -27,7 +27,7 @@ class PostService {
 
     static async getPostByTitulo(titulo){
         var post = await PostModel.findOne({
-            where: { /** ME TRAE TODOS LOS USUARIOS QUE CUMPLAN EL PARAMETRO INDICADO*/
+            where: { 
                 titulo: titulo
             },
             raw: true,

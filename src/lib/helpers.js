@@ -1,22 +1,16 @@
 const bcrypt = require('bcryptjs');
 
 const helpers = {};
-
-//METODO UTILIZADO EN EL REGISTER
 helpers.encryptPassword = async (password) => {
-  const salt = await bcrypt.genSalt(10); //genero un patron
-  const hash = await bcrypt.hash(password, salt); //le doy la pass y el patron
+  const salt = await bcrypt.genSalt(10); 
+  const hash = await bcrypt.hash(password, salt); 
   return hash;
 };
 
-//METODO UTILIZADO EN EL LOGIN
-//compara las contraseñas
 helpers.matchPassword = async (password, savedPassword) => {
   try {
-    return await bcrypt.compare(password, savedPassword); //compara lo que ya tengo guardado con lo que trata de logearse
+    return await bcrypt.compare(password, savedPassword); 
   } catch (e) {
-    console.log(e)
   }
 };
-
 module.exports = helpers;

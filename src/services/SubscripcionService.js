@@ -12,7 +12,7 @@ class SubscripcionService {
 
     static async getAll(id){
         var usersSuscriptos = await SubscripcionModel.findAll({
-            where: { /** ME TRAE TODOS LOS USUARIOS QUE CUMPLAN EL PARAMETRO INDICADO*/
+            where: { 
                 idUser: id
             },
             raw: true,

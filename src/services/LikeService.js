@@ -11,7 +11,7 @@ class LikeService {
 
     static async getById(post, user){
         var like = await LikeModel.findAll({
-            where: { /** ME TRAE TODOS LOS USUARIOS QUE CUMPLAN EL PARAMETRO INDICADO*/
+            where: { 
                 idUser: user,
                 idPost: post
             },
@@ -23,7 +23,7 @@ class LikeService {
 
     static async getAll(id){
         var likedPosts = await LikeModel.findAll({
-            where: { /** ME TRAE TODOS LOS USUARIOS QUE CUMPLAN EL PARAMETRO INDICADO*/
+            where: { 
                 idUser: id
             },
             raw: true,

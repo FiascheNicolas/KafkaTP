@@ -14,7 +14,6 @@ function like(link, id, cantidadLikes){
         const cantLikes = link.querySelector('b');
         icon.className = 'fas fa-heart text-success';
         cantLikes.innerText = parseInt(cantidadLikes) + 1;
-        console.log(res);
     })
     .catch( err => {
         console.error(err);

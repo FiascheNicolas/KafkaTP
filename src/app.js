@@ -16,13 +16,13 @@ const hbs = require('express-handlebars');
 const consume = require("./consumer");
 const produce = require('./producer');
 
-//SERVICES--------------------------------------
+
 const {PostService} = require('./services/PostService');
 const {SubscripcionService} = require('./services/SubscripcionService');
 const {UserService} = require('./services/UserService');
 const { LikeService } = require('./services/LikeService');
-//---------------------------------------------------
-//REGISTRO
+
+
 var user = require('./routes/user'); 
 
 const app = express();
@@ -31,11 +31,11 @@ const io = new Server(server);
 
 require('./lib/passport');
 
-//MIDDLEWARES------------------------------------------
-app.use(express.urlencoded({extended:false}))//para q cuando envien un POST desde un form lo entienda
-app.use(express.json());//para q entienda objetos json
+
+app.use(express.urlencoded({extended:false}))
+app.use(express.json());
 app.use(morgan('dev'));
-app.use(cors());//para q permita q cualquier servidor pida cosas y haga operaciones
+app.use(cors());
 app.use(express.static(path.join(__dirname, './views/static')));
 
 app.use(cookieParser());
@@ -48,16 +48,16 @@ app.use(session({
     saveUninitialized: true,
 }));
 app.use(flash()); 
-//passport
+
 app.use(passport.initialize());
 app.use(passport.session());
 
-//SETTINGS---------------------------------------------
+
 app.set('json spaces', 2);
-app.set('view engine', 'hbs'); //CAMBIO PUG POR HBS
+app.set('view engine', 'hbs'); 
 app.set('views', './src/views');
 
-//VARIABLES GLOBALES-----------------------------------
+
 app.use((req, res, next) =>{
     app.locals.success = req.flash('success');
     app.locals.message = req.flash('message');
@@ -66,15 +66,15 @@ app.use((req, res, next) =>{
     next();
 });
 
-//ROUTES-----------------------------------------------
-//USER
+
+
 app.use(require('./routes/user'));
 
 app.get('/', (req, res) => {
     res.render('index');
 });
 
-//HOME
+
 app.get('/home', isLoggedIn, (req, res) => {
     notificacion(io, app.locals.user.users.username);
     res.render('home', { page_title: 'Home', user: app.locals.user.users});
@@ -86,7 +86,7 @@ app.post('/seguirUsuario', isLoggedIn ,async (req, res) => {
         const followUser = await UserService.getById(req.body.followId);
         followName = followUser.users.dataValues.username;
 
-        // Me fijo si el usuario esta en la lista de seguidos
+        
         const seguidos = await SubscripcionService.getAll(user.id);
         const followExists = seguidos.usersSuscriptos.filter((s) => s.followName === followName);
 
@@ -99,7 +99,7 @@ app.post('/seguirUsuario', isLoggedIn ,async (req, res) => {
             produce
             .follow(followName + '_notificaciones', user.username)
             .catch((err) => {
-                console.error("Error en producer: ", err);
+                console.error("Error: ", err);
             });
             res.end();
         } 
@@ -112,18 +112,17 @@ app.post('/seguirUsuario', isLoggedIn ,async (req, res) => {
 app.post('/likePost', isLoggedIn , async (req, res) => {
     const user = app.locals.user.users;
     const post = await PostService.getPostById(req.body.id);
-    console.log("POST --> "+ post.post);
 
     const userCreadorPost = await UserService.getById(post.post.idUser);
     postTitulo = post.post.titulo;
 
-    // Chequeo si ya se le dio like al post, sino lo agrego.
+    
     const like = await LikeService.getById(post.post.id, user.id);
     if(like.length > 0){
         return res.status(400).send('Ya le diste like a este post');
     }
-    await LikeService.add(post.post.id, user.id); //creo el registro para la persistencia del like
-    await PostService.udpdateLikesPost(post.post.id, post.post.cantidadLikes + 1); //actualizo la cant. de likes del post
+    await LikeService.add(post.post.id, user.id); 
+    await PostService.udpdateLikesPost(post.post.id, post.post.cantidadLikes + 1); 
 
     produce
     .like(userCreadorPost.users.dataValues.username + '_notificaciones', postTitulo, user.username)
@@ -133,7 +132,7 @@ app.post('/likePost', isLoggedIn , async (req, res) => {
     res.end();
 });
 
-//-------------------------------------
+
 app.get('/noticias', isLoggedIn , (req, res) => {
     res.render('noticias');
 });
@@ -149,20 +148,17 @@ app.get('/noticias/traerTopics', isLoggedIn ,async (req, res) => {
     subscripciones.usersSuscriptos.forEach(user => {
         topics.push(user.followName);
     })
-    console.log(topics);
     res.json(topics);
 
     res.end();
 });
 
-//-------------------------------------
-/** AGREGAR UN NUEVO POST Y GUARDARLO */
+
 app.get('/nuevoPost', isLoggedIn , (req,res)=>{
     return res.render('nuevoPost');
 });
 app.post('/agregarNuevoPost', isLoggedIn , async (req,res)=>{
     const idUser = app.locals.user.users.username;
-    console.log(app.locals.user);
     const nuevoPostBD = {
         "topic" : idUser + '_posts', 
         "msg": {
@@ -174,13 +170,11 @@ app.post('/agregarNuevoPost', isLoggedIn , async (req,res)=>{
         }
     }
 
-    console.log("Nuevo post --> "+ nuevoPostBD.msg);
-    await PostService.add(nuevoPostBD.msg); //guardo los datos post en la BD para la persistencia
+    await PostService.add(nuevoPostBD.msg); 
 
-    const postTotales = await PostService.getAll(); //obtengo todos los posts
-    console.log("CANT DE POSTS CREADOS --> "+postTotales.posts.length); //obtengo el id del nuevo post creado
+    const postTotales = await PostService.getAll(); 
 
-    const nuevoPostKafka = { /** creo un nuevo JSON para usarlo con kafka */
+    const nuevoPostKafka = { 
         "topic" : idUser + '_posts', 
         "msg": {
             "id" : postTotales.posts.length,
@@ -192,30 +186,29 @@ app.post('/agregarNuevoPost', isLoggedIn , async (req,res)=>{
         }
     }
 
-    await produce.guardarPost(nuevoPostKafka); //creo el post con kafka 
+    await produce.guardarPost(nuevoPostKafka); 
     res.redirect('/home');
 });
 
-//-------------------------------------
-/** Buscar usuarios para seguir */
+
 app.get('/buscarUsuarios', isLoggedIn , (req,res)=>{
     return res.render('listarUsuarios');
 });
 app.post('/buscarUsuarios', isLoggedIn, async(req,res)=>{
     const user = app.locals.user.users;
-    const usuariosBuscados = await UserService.findUsersByUsername(req.body.username); //realizo la query
+    const usuariosBuscados = await UserService.findUsersByUsername(req.body.username); 
     var usuarios = usuariosBuscados.userFilters;
 
     
     var seguidos = await SubscripcionService.getAll(user.id);
     seguidos = seguidos.usersSuscriptos;
 
-    // Filtro los usuarios ya seguidos
+    
     usuarios = usuarios.filter((usuario) => {
         return !seguidos.some((s) => s.followName === usuario.username);
     });
 
-    usuarios = usuarios.filter((u)=>{ //nuevo filtro para que no traiga al mismo user que esta logueado
+    usuarios = usuarios.filter((u)=>{ 
         return u.id !== user.id;
     });
     return res.render('listarUsuarios', {usuarios: usuarios});
@@ -223,7 +216,7 @@ app.post('/buscarUsuarios', isLoggedIn, async(req,res)=>{
 
 
 io.on('connection', (socket) => {
-    console.log('a user connected'); 
+    console.log('user connected'); 
 });
 
 module.exports = server;

@@ -19,7 +19,6 @@
   }
   .form {
     position: relative;
-    /* width: 100%; */
     width: 90%;
     max-width: 500px;
     padding: 80px 40px 40px;
@@ -32,7 +31,6 @@
     top: -50px;
     left: calc(50% - 50px);
     width: 100px;
-    /* background: rgba(255,255,255, 0.8); */
     background: rgba(2, 2, 2, 0.8);
     border-radius: 50%;
   }
@@ -60,12 +58,10 @@
     font-size: 1rem;
     pointer-events: none;
     transition: .3s ease-out;
-    /* font-family: 'Open Sans Condensed', sans-serif; */
   }
   .form .input-group input:focus + label,
   .form .input-group input:valid + label {
     transform: translateY(-18px);
-    /* color: #247bee; */
     color: #ee9024;
     font-size: .8rem;
   }
@@ -74,13 +70,8 @@
     margin-left: auto;
     border: none;
     outline: none;
-    /*background: #ff652f;*/
-    /* background: #247bee; */
-    /* background: #0357b6; */
-    /*background: #ee9024;*/
     background-color: transparent;
 
-    /*color: #ffffff;*/
     color: #ee9024;
     font-size: 1.5rem;
     text-transform: uppercase;
@@ -89,7 +80,6 @@
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Alegreya Sans SC', sans-serif;
-    /* font-family: 'Open Sans Condensed', sans-serif; */
   }
 
   .cancelar-btn {
@@ -106,7 +96,6 @@
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Alegreya Sans SC', sans-serif;
-    /* font-family: 'Open Sans Condensed', sans-serif; */
   }
 
   .register-btn {
@@ -123,8 +112,6 @@
     border-radius: 5px;
     cursor: pointer;
     font-family: 'Alegreya Sans SC', sans-serif;
-    /* font-family: 'Open Sans Condensed', sans-serif; */
-
   }
   .divisor{
     align-items: center;

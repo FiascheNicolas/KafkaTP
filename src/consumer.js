@@ -1,4 +1,4 @@
-const { Kafka } = require("kafkajs") //dependencia para usar kafka con node
+const { Kafka } = require("kafkajs") 
 const kafka = new Kafka({ clientId: "node" , brokers: ["localhost:9092"]} );
 const {LikeService} = require('./services/LikeService');
 const {PostService} = require('./services/PostService');
@@ -6,9 +6,9 @@ const {PostService} = require('./services/PostService');
 const consume = async (io, username) =>{
     const consumer = kafka.consumer({ groupId: "node"}); 
 
-    await consumer.connect(); //se conecta el consumidor 
-    await consumer.subscribe({topic: username + "_notificaciones", fromBeginning: true}); //para recibir los mensajes de este topic
-    await consumer.run({ /** empiza a recibir los mensajes */
+    await consumer.connect(); 
+    await consumer.subscribe({topic: username + "_notificaciones", fromBeginning: true}); 
+    await consumer.run({ 
         autoCommit: true,
         eachMessage: ({message})=>{
             io.emit(username + '_notificacion', `${message.value}`);
@@ -17,7 +17,6 @@ const consume = async (io, username) =>{
 }
 
 const traerMensajes = async (req, res) => {
-    console.log("llegue a traer mensajes :)")
     try {
         const timestamp = Date.now();
         const consumer = kafka.consumer({ groupId: timestamp.toString() })
@@ -25,7 +24,7 @@ const traerMensajes = async (req, res) => {
         await consumer.subscribe({ topic: req.body.topic, fromBeginning: true })
 
         let retorno = [];
-        //let post=retorno
+        
         await consumer.run({
             eachMessage: async ({ message }) => {
                 var value = JSON.parse(message.value.toString());
@@ -45,7 +44,7 @@ const traerMensajes = async (req, res) => {
         setTimeout(() => {
             consumer.disconnect()
             res.send(retorno);
-            //res.render('noticias.ejs', { retorno })
+            
         }, 1000)
     } catch (error) {
         console.log(error)

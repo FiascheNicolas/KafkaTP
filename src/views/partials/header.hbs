@@ -1,5 +1,4 @@
 <header>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand navbar-dark fixed-top bg-dark">
         <div class="container-fluid">
             <a id="{{user.username}}" class="navbar-brand mr-1 username" href="/">UNLa</a>
@@ -18,12 +17,6 @@
                         <a class="nav-link" href="/noticias">Noticias</a>
                     </li>
                 </ul>
-                {{!-- 
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
-                --}}
             </div>
             <ul class="navbar-nav ml-auto ml-md-0">
                 <li id="cantidadNoti" class="nav-item dropdown no-arrow mx-1">
@@ -47,9 +40,6 @@
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                     <a class="dropdown-item" href="#">Perfil</a>
                     <div class="dropdown-divider"></div>
-                    {{!--
-                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Cerrar sesión</a>
-                    --}}
                     <a class="dropdown-item" href="/logout">Cerrar sesión</a>
                     </div>
                 </li>
