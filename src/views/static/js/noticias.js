@@ -5,8 +5,7 @@ const api_url = "http://localhost:8080/noticias"
 let listNoticias = [];
 let listTopicos = [];
 
-function apiGet() {
-    fetch(api_url + '/traerTopics', {
+fetch(api_url + '/traerTopics', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' }
     })
@@ -36,7 +35,7 @@ function apiGet() {
                 })
             }
         });
-}
+
 
 
 function traerMensajes(paramTopico) {
@@ -106,5 +105,4 @@ function renderNoticia(paramPosteos, paramIdHtml) {
         `;
     containerNoticia.innerHTML = ``;
     paramIdHtml.appendChild(div);
-
 }
