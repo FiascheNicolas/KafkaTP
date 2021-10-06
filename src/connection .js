@@ -6,7 +6,7 @@ const subscripcionModel = require('./models/Subscripcion');
 const likeModel = require('./models/Like');
 
 
-const sequelize = new Sequelize("kafkaredsocial_db", "root", "root" ,{
+const sequelize = new Sequelize("faceunla", "root", "root" ,{
     host : "localhost",
     port: "3306",
     dialect: "mysql"

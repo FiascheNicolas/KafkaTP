@@ -31,7 +31,6 @@ const io = new Server(server);
 
 require('./lib/passport');
 
-
 app.use(express.urlencoded({extended:false}))
 app.use(express.json());
 app.use(morgan('dev'));
@@ -41,7 +40,7 @@ app.use(express.static(path.join(__dirname, './views/static')));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
- 
+
 app.use(session({
     secret: 'DistribuidosTp2',
     resave : true,
@@ -80,34 +79,7 @@ app.get('/home', isLoggedIn, (req, res) => {
     res.render('home', { page_title: 'Home', user: app.locals.user.users});
 });
 
-app.post('/seguirUsuario', isLoggedIn ,async (req, res) => {
-    try{
-        const user = app.locals.user.users;
-        const followUser = await UserService.getById(req.body.followId);
-        followName = followUser.users.dataValues.username;
 
-        
-        const seguidos = await SubscripcionService.getAll(user.id);
-        const followExists = seguidos.usersSuscriptos.filter((s) => s.followName === followName);
-
-        if(followExists.length > 0){
-            return res.status(400).send('Ya seguis a ese usuario');
-        }
-        else{
-            await SubscripcionService.add(followName, user.id);
-            
-            produce
-            .follow(followName + '_notificaciones', user.username)
-            .catch((err) => {
-                console.error("Error: ", err);
-            });
-            res.end();
-        } 
-    } catch(err){
-        console.error(err);
-        res.status(400).send(err);
-    }
-});
 
 app.post('/likePost', isLoggedIn , async (req, res) => {
     const user = app.locals.user.users;
@@ -153,6 +125,28 @@ app.get('/noticias/traerTopics', isLoggedIn ,async (req, res) => {
     res.end();
 });
 
+app.get('/buscarUsuarios', isLoggedIn , (req,res)=>{
+    return res.render('listarUsuarios');
+});
+app.post('/buscarUsuarios', isLoggedIn, async(req,res)=>{
+    const user = app.locals.user.users;
+    const usuariosBuscados = await UserService.findUsersByUsername(req.body.username); 
+    var usuarios = usuariosBuscados.userFilters;
+
+    
+    var seguidos = await SubscripcionService.getAll(user.id);
+    seguidos = seguidos.usersSuscriptos;
+
+    usuarios = usuarios.filter((usuario) => {
+        return !seguidos.some((s) => s.followName === usuario.username);
+    });
+
+    usuarios = usuarios.filter((u)=>{ 
+        return u.id !== user.id;
+    });
+    return res.render('listarUsuarios', {usuarios: usuarios});
+});
+
 
 app.get('/nuevoPost', isLoggedIn , (req,res)=>{
     return res.render('nuevoPost');
@@ -190,29 +184,35 @@ app.post('/agregarNuevoPost', isLoggedIn , async (req,res)=>{
     res.redirect('/home');
 });
 
+app.post('/seguirUsuario', isLoggedIn ,async (req, res) => {
+    try{
+        const user = app.locals.user.users;
+        const followUser = await UserService.getById(req.body.followId);
+        followName = followUser.users.dataValues.username;
 
-app.get('/buscarUsuarios', isLoggedIn , (req,res)=>{
-    return res.render('listarUsuarios');
+        
+        const seguidos = await SubscripcionService.getAll(user.id);
+        const followExists = seguidos.usersSuscriptos.filter((s) => s.followName === followName);
+
+        if(followExists.length > 0){
+            return res.status(400).send('Ya seguis a ese usuario');
+        }
+        else{
+            await SubscripcionService.add(followName, user.id);
+            
+            produce
+            .follow(followName + '_notificaciones', user.username)
+            .catch((err) => {
+                console.error("Error: ", err);
+            });
+            res.end();
+        } 
+    } catch(err){
+        console.error(err);
+        res.status(400).send(err);
+    }
 });
-app.post('/buscarUsuarios', isLoggedIn, async(req,res)=>{
-    const user = app.locals.user.users;
-    const usuariosBuscados = await UserService.findUsersByUsername(req.body.username); 
-    var usuarios = usuariosBuscados.userFilters;
 
-    
-    var seguidos = await SubscripcionService.getAll(user.id);
-    seguidos = seguidos.usersSuscriptos;
-
-    
-    usuarios = usuarios.filter((usuario) => {
-        return !seguidos.some((s) => s.followName === usuario.username);
-    });
-
-    usuarios = usuarios.filter((u)=>{ 
-        return u.id !== user.id;
-    });
-    return res.render('listarUsuarios', {usuarios: usuarios});
-});
 
 
 io.on('connection', (socket) => {

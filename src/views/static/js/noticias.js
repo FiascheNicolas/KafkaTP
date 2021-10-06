@@ -4,10 +4,6 @@ const api_url = "http://localhost:8080/noticias"
 
 let listNoticias = [];
 let listTopicos = [];
-window.onload = () => {
-    apiGet();
-};
-setInterval(apiGet, 6000);
 
 function apiGet() {
     fetch(api_url + '/traerTopics', {
